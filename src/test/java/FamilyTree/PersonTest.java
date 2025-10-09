@@ -47,6 +47,35 @@ public class PersonTest {
     }
 
     @Test
+    public void getGrandchildrenPetsShouldReturnAllGrandchildrenPets() {
+        // Arrange
+        var grandfather = new Person("Grandfather", "Last name", 100, Gender.Male);
+        int numberOfFathers = 2;
+        int numberOfChildren = 3;
+        int numberOfPets = 5;
+
+        for (int i = 0; i < numberOfFathers; i++) {
+            var father = new Person(String.format("Father %d", i), "Last name", 50, Gender.Male);
+            grandfather.addChild(father);
+            for (int j = 0; j < numberOfChildren; j++) {
+                var child = new Person(String.format("Child %d%d", i, j), "Last name", 25, Gender.Male);
+                father.addChild(child);
+                for (int k = 0; k < numberOfPets; k++) {
+                    var pet = new Pet(String.format("Pet %d%d%d", i, j, k), 10, "Cat");
+                    child.addPet(pet);
+                }
+            }
+        }
+
+        // Act
+        var grandchildrenPets = grandfather.getGrandchildrenPets();
+        var expectedPetCount = numberOfFathers * numberOfChildren * numberOfPets;
+
+        // Assert
+        assertEquals(expectedPetCount, grandchildrenPets.size());
+    }
+
+    @Test
     public void simpleSettersAssignExpectedValuesToFields() {
         // Arrange
         var person = new Person("Henk", "von","Baron", 100, Gender.Male);

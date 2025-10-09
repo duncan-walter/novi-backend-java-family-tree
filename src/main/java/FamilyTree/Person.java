@@ -123,4 +123,14 @@ public class Person {
 
         return grandchildren;
     }
+
+    public List<Pet> getGrandchildrenPets() {
+        List<Pet> grandchildrenPets = new ArrayList<>();
+
+        for (Person grandchild : this.getGrandchildren()) {
+            grandchildrenPets.addAll(grandchild.getPets());
+        }
+
+        return grandchildrenPets;
+    }
 }
