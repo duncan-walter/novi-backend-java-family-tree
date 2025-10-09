@@ -104,10 +104,14 @@ public class Person {
 
     public void addPet(Pet pet) {
         this.pets.add(pet);
+        pet.setOwner(this);
     }
 
     public void addSibling(Person sibling) {
+        if (siblings.contains(sibling)) return;
+
         this.siblings.add(sibling);
+        sibling.addSibling(this);
     }
 
     public List<Person> getGrandchildren() {
