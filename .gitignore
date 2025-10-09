@@ -1,2 +1,6 @@
-out
-target
+.idea/*
+!.idea/misc.xml
+!.idea/vcs.xml
+
+out/
+target/

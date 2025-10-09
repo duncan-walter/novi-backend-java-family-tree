@@ -1,9 +1,0 @@
-# Ignore everything in the .idea folder by default
-*
-
-# But keep these essential project configuration files
-!.gitignore
-!misc.xml
-!modules.xml
-!vcs.xml
-!*.iml
