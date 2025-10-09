@@ -94,6 +94,12 @@ public class Person {
 
     public void addChild(Person child) {
         this.children.add(child);
+
+        if (this.gender.equals(Gender.Male)) {
+            child.setParents(child.getMother(), this);
+        } else {
+            child.setParents(this, child.getFather());
+        }
     }
 
     public void addPet(Pet pet) {
@@ -104,7 +110,13 @@ public class Person {
         this.siblings.add(sibling);
     }
 
-    public List<Person> getGrandChildren() {
-        return new ArrayList<>();
+    public List<Person> getGrandchildren() {
+        List<Person> grandchildren = new ArrayList<>();
+
+        for (Person child : this.getChildren()) {
+            grandchildren.addAll(child.getChildren());
+        }
+
+        return grandchildren;
     }
 }
