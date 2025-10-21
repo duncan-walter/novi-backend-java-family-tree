@@ -92,13 +92,22 @@ public class Person {
         return this.pets;
     }
 
-    public void addChild(Person child) {
-        this.children.add(child);
+    public void addChild(Person childToAdd) {
+        if (this.children.contains(childToAdd)) return;
+
+        this.children.add(childToAdd);
 
         if (this.gender.equals(Gender.Male)) {
-            child.setParents(child.getMother(), this);
+            childToAdd.setParents(childToAdd.getMother(), this);
         } else {
-            child.setParents(this, child.getFather());
+            childToAdd.setParents(this, childToAdd.getFather());
+        }
+
+        for (Person child : this.children) {
+            if (child == childToAdd) continue;
+            if (child.getSiblings().contains(childToAdd)) continue;
+
+            child.addSibling(childToAdd);
         }
     }
 
@@ -132,5 +141,34 @@ public class Person {
         }
 
         return grandchildrenPets;
+    }
+
+    public List<Person> getCousins() {
+        return this.getCousins(null);
+    }
+
+    public List<Person> getCousins(Gender gender) {
+        List<Person> cousins = new ArrayList<>();
+        List<Person> parentSiblings = new ArrayList<>();
+        var mother = this.getMother();
+        var father = this.getFather();
+
+        if (father != null) {
+            parentSiblings.addAll(father.getSiblings());
+        }
+
+        if (mother != null) {
+            parentSiblings.addAll(mother.getSiblings());
+        }
+
+        for (Person parentSibling : parentSiblings) {
+            var parentSiblingChildren = parentSibling.getChildren()
+                    .stream()
+                    .filter(parentChild -> gender == null || parentChild.getGender() == gender)
+                    .toList();
+            cousins.addAll(parentSiblingChildren);
+        }
+
+        return cousins;
     }
 }

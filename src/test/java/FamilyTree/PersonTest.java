@@ -76,6 +76,93 @@ public class PersonTest {
     }
 
     @Test
+    public void getCousinsShouldReturnAllCousins() {
+        // Arrange
+        var grandfather = new Person("Grandfather", "Last name", 100, Gender.Male);
+        int numberOfFathers = 5;
+        int numberOfFemaleChildren = 3;
+        int numberOfMaleChildren = 3;
+        for (int i = 0; i < numberOfFathers; i++) {
+            var father = new Person(String.format("Father %d", i), "Last name", 50, Gender.Male);
+            grandfather.addChild(father);
+            for (int j = 0; j < numberOfFemaleChildren; j++) {
+                var child = new Person(String.format("Child %d%d (F)", i, j), "Last name", 25, Gender.Female);
+                father.addChild(child);
+            }
+            for (int j = 0; j < numberOfMaleChildren; j++) {
+                var child = new Person(String.format("Child %d%d (M)", i, j), "Last name", 25, Gender.Male);
+                father.addChild(child);
+            }
+        }
+
+        // Act
+        var cousinsOfFirstChild = grandfather.getChildren().getFirst().getChildren().getFirst().getCousins();
+        var expectedCousinCount = (numberOfFathers - 1) * (numberOfFemaleChildren + numberOfMaleChildren);
+
+        // Assert
+        assertEquals(expectedCousinCount, cousinsOfFirstChild.size());
+    }
+
+    // should get all females
+    @Test
+    public void getCousinsShouldOnlyReturnNiecesWhenGenderFemaleIsPassed() {
+        // Arrange
+        var grandfather = new Person("Grandfather", "Last name", 100, Gender.Male);
+        int numberOfFathers = 5;
+        int numberOfFemaleChildren = 3;
+        int numberOfMaleChildren = 10;
+        for (int i = 0; i < numberOfFathers; i++) {
+            var father = new Person(String.format("Father %d", i), "Last name", 50, Gender.Male);
+            grandfather.addChild(father);
+            for (int j = 0; j < numberOfFemaleChildren; j++) {
+                var child = new Person(String.format("Child %d%d", i, j), "Last name", 25, Gender.Female);
+                father.addChild(child);
+            }
+
+            for (int j = 0; j < numberOfMaleChildren; j++) {
+                var child = new Person(String.format("Child %d%d (M)", i, j), "Last name", 25, Gender.Male);
+                father.addChild(child);
+            }
+        }
+
+        // Act
+        var cousinsOfFirstChild = grandfather.getChildren().getFirst().getChildren().getFirst().getCousins(Gender.Female);
+        var expectedCousinCount = (numberOfFathers - 1) * numberOfFemaleChildren;
+
+        // Assert
+        assertEquals(expectedCousinCount, cousinsOfFirstChild.size());
+    }
+
+    @Test
+    public void getCousinsShouldOnlyReturnNephewsWhenGenderMaleIsPassed() {
+        // Arrange
+        var grandfather = new Person("Grandfather", "Last name", 100, Gender.Male);
+        int numberOfFathers = 5;
+        int numberOfFemaleChildren = 10;
+        int numberOfMaleChildren = 3;
+        for (int i = 0; i < numberOfFathers; i++) {
+            var father = new Person(String.format("Father %d", i), "Last name", 50, Gender.Male);
+            grandfather.addChild(father);
+            for (int j = 0; j < numberOfFemaleChildren; j++) {
+                var child = new Person(String.format("Child %d%d", i, j), "Last name", 25, Gender.Female);
+                father.addChild(child);
+            }
+
+            for (int j = 0; j < numberOfMaleChildren; j++) {
+                var child = new Person(String.format("Child %d%d (M)", i, j), "Last name", 25, Gender.Male);
+                father.addChild(child);
+            }
+        }
+
+        // Act
+        var cousinsOfFirstChild = grandfather.getChildren().getFirst().getChildren().getFirst().getCousins(Gender.Male);
+        var expectedCousinCount = (numberOfFathers - 1) * numberOfMaleChildren;
+
+        // Assert
+        assertEquals(expectedCousinCount, cousinsOfFirstChild.size());
+    }
+
+    @Test
     public void simpleSettersAssignExpectedValuesToFields() {
         // Arrange
         var person = new Person("Henk", "von","Baron", 100, Gender.Male);
