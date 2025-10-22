@@ -97,17 +97,24 @@ public class Person {
 
         this.children.add(childToAdd);
 
+        // Set parents
         if (this.gender.equals(Gender.Male)) {
             childToAdd.setParents(childToAdd.getMother(), this);
         } else {
             childToAdd.setParents(this, childToAdd.getFather());
         }
 
+        // Add new child to existing children as sibling
         for (Person child : this.children) {
             if (child == childToAdd) continue;
             if (child.getSiblings().contains(childToAdd)) continue;
 
             child.addSibling(childToAdd);
+        }
+
+        // Add existing children to new child as siblings
+        for (Person child : this.children.stream().filter(c -> c != childToAdd).toList()) {
+            childToAdd.addSibling(child);
         }
     }
 
