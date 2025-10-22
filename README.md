@@ -1,3 +1,7 @@
+## Requirements
+- Java 25 SDK
+- Maven not required, Maven Wrapper is supplied
+
 ## Inleiding
 In de les hebben we het gehad over Maven en unitTesten. 
 
